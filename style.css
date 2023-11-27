@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #243333;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Lato' sans-serif;
+    margin: 0;
+    font-size: 30px;
+}
+
+.contenidor{
+    margin-bottom: 30px;
+    perspective: 1000px;
+}
+
+.lletra{
+    background-color: #444451;
+    height: 40px;
+    width: 40px;
+    margin: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lletra.correct{
+    background-color: green;
+}
+
+.lletra.error{
+    background-color: red;
+}
+
+.lletra:hover{
+    background-color: #804000;
+}
+
+.fila{
+    display: flex;
+    justify-content: center;
+}
+
+.paraula{
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+    font-size: 100px;
+}
+
+p.text{
+    margin:5px 0;
+}
+p.text span{
+    color: #6feaf6;
+}
