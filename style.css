@@ -52,14 +52,14 @@ body{
 }
 
 .paraula{
-    margin-top: 50px;
+    margin-top: 25px;
     display: flex;
     justify-content: space-around;
     font-size: 100px;
 }
 
 p.text{
-    margin:5px 0;
+    margin-top:50px;
 }
 p.text span{
     color: #6feaf6;

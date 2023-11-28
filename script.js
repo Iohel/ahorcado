@@ -1,83 +1,45 @@
 //Capturar los elementos del dom
 const contenidor = document.querySelector('.contenidor');
-const seients = document.querySelectorAll('.fila .seient:not(.ocupat)');
 const contador = document.getElementById('contador');
+const error = document.getElementById('errors');
 const total = document.getElementById('total');
-const peliculaSelect = document.getElementById('pelicula');
+const time = document.getElementById('time');
+const showParaula = document.querySelector('.paraula');
 
-//Precio de la pelicula selecionada.
-let preuDelTicket = +peliculaSelect.value;
+let temaProva = ['test','trial','you','reddit'];
+let random = Math.random()*(temaProva.length-1);
+let paraula = temaProva[random.toFixed()].toUpperCase(); 
 
-//llenamos interficie usuario
-ompleUI();
-
-/*Funciones*/
-function actualitzaSeleccioSeients(){
-    
-    const seientsSeleccionats = document.querySelectorAll('.fila .seient.seientsSeleccionats');
-    
-    /* const seientsIndex = [...seientsSeleccionats.map(function(seient){
-        return [...seients].indexOf(seient);
-    })]; */
-
-    const seientsIndex = [...seientsSeleccionats.entries((seient) => [...seients].indexOf(seient))];
-    
-    localStorage.setItem('seientsSeleccionats', JSON.stringify(seientsIndex));
-    
-    const contadorSeientsSeleccionats = seientsSeleccionats.length;
-
-    contador.innerText = contadorSeientsSeleccionats;
-
-    total.innerText = contadorSeientsSeleccionats * preuDelTicket;
-
+let paraulaAmagada = "";
+function prepararParaula() {
+    showParaula.innerText = "";
+    for (let i = 0; i < paraula.length; i++) {
+        showParaula.innerText += '-' ;
+    }
+    paraulaAmagada = showParaula.innerText;
     
 }
 
-function ompleUI(){
-    const seientsSeleccionats = JSON.parse(localStorage.getItem('seientsSeleccionats'));
+function adivinarLletra(e) {
     
-    if (seients !== null && seientsSeleccionats.length > 0){
-        seients.forEach((seient, index) => {
-            if(seientsSeleccionats.indexOf(index) > -1){
-                seient.classList.add('seleccionat');
-            }
-        })
+    for (let i = 0; i < paraulaAmagada.length; i++) {
+        if (paraula.charAt(i) == e) {
+            console.log(e);
+            paraulaAmagada.charAt(i) = e;
+            
+        }
     }
+    console.log(paraulaAmagada);
+    showParaula.innerText = paraulaAmagada;
 
-    const indexPeliculaSeleccionada = localStorage.getItem('indexPeliculaSeleccionada');
-    if (indexPeliculaSeleccionada !== null) {
-        peliculaSelect.selectedIndex = indexPeliculaSeleccionada;
-    }
-    const preuPeliculaSeleccionada = localStorage.getItem('preuPeliculaSeleccionada');
-    if(preuPeliculaSeleccionada !== null) {
-        preuDelTicket = +preuPeliculaSeleccionada;
-    }
-
-    
 }
-
-/* Eventos */
 
 contenidor.addEventListener('click', (e) => {
-
-    if (e.target.classList.contains('seient') && !e.target.classList.contains('ocupat')) {
     
-        e.target.classList.toggle('seleccionat');
-    
-        actualitzaSeleccioSeients();
-    }
-
-
 });
+prepararParaula();
+adivinarLletra('T');
 
-peliculaSelect.addEventListener('change', (e) => {
-    preuDelTicket = +e.target.value;
 
-    localStorage.setItem('indexPeliculaSeleccionada', e.target.selectedIndex);
-    localStorage.setItem('preuPeliculaSeleccionada', e.target.value);
 
-    actualitzaSeleccioSeients();
-})
-
-actualitzaSeleccioSeients();
 

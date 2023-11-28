@@ -1,5 +1,8 @@
 Day 1:
 HTML and CSS Done?
-
+For day 2: Complete final check of css and start Javascript.
 Day 2: 
-Complete final check of css and start Javascript.
+Automated adjusted - Done
+Started adivinarlletra.
+For day 3: 
+Acabar adivinar lletra.
