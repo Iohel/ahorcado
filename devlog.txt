@@ -11,3 +11,6 @@ Acabar adivinar lletra.
 Day 3:
 Adivinar Lletras completed.
 For home: finish game logic.
+
+Day 4:
+Sincronia
