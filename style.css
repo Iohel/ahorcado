@@ -14,10 +14,12 @@ body{
     margin: 0;
     font-size: 30px;
 }
-
+div#time2{
+    margin-bottom: 20px;
+}
 .contenidor{
     margin-bottom: 30px;
-    perspective: 1000px;
+    text-align: center;
 }
 
 .lletra{
@@ -32,14 +34,18 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .lletra.correct{
     background-color: green;
+    pointer-events: none;
+    
 }
 
 .lletra.error{
     background-color: red;
+    pointer-events: none;
 }
 
 .lletra:hover{
@@ -61,6 +67,53 @@ body{
 p.text{
     margin-top:50px;
 }
+
 p.text span{
     color: #6feaf6;
+}
+
+button{
+    display: block;
+    margin: 20px auto;
+    background: crimson;
+    color: wheat;
+    border: 0;
+    padding: 6px 10px;
+
+}
+
+.envoltorio-popup{
+    background: rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.popup{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 10% auto;
+    padding: 20px;
+    background: black;
+    position: relative;
+}
+
+.popup a{
+    background:crimson;
+    color: white;
+    text-decoration: none;
+    padding: 6px 10px;
+    width: 100px;
+}
+
+.cerrar-popup{
+    position: absolute;
+    top: 5px;
+    right: 8px;
+
 }

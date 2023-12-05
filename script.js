@@ -3,14 +3,70 @@ const contenidor = document.querySelector('.contenidor');
 const contador = document.getElementById('contador');
 const error = document.getElementById('errors');
 const total = document.getElementById('total');
+const retry = document.getElementById('retry')
 const time = document.getElementById('time');
+const status = document.getElementById('status');
+const palabra = document.getElementById('palabra');
 const showParaula = document.querySelector('.paraula');
 
 let temaProva = ['test','trial','you','reddit'];
 let random = Math.random()*(temaProva.length-1);
 let paraula = temaProva[random.toFixed()].toUpperCase(); 
-
 let paraulaAmagada = "";
+
+//Cronometro
+let elCrono;
+let mifecha = new Date;
+let laHora = document.getElementById("time");
+let laHora2 = document.getElementById("time2");
+
+//inicializa el tiempo del cronometro
+mifecha.setHours(0,0,0,0);
+
+//inicializa el texto de laHora
+laHora.innerHTML = "00:00:00";
+
+//Main interval
+function crono(){
+
+    let horas = mifecha.getHours();
+    let minutos = mifecha.getMinutes();
+    let segundos = mifecha.getSeconds();
+
+    segundos += 1;
+
+    if(segundos == 60){
+        segundos = 0;
+        minutos += 1;
+        
+        mifecha.setMinutes(minutos);
+    }
+
+    mifecha.setSeconds(segundos);
+
+    if (horas < 10) {horas = "0" + horas;}
+    if (minutos < 10) {minutos = "0" + minutos;}
+    if (segundos < 10) {segundos = "0" + segundos;}
+
+    laHora.innerHTML = horas + ":" + minutos + ":" + segundos;
+
+
+}
+function reiniciarCrono(){
+    mifecha.setHours(0,0,0,0);
+
+//inicializa el texto de laHora
+    laHora.innerHTML = "00:00:00";
+}
+function start(){
+    elCrono = setInterval(crono, 1000);
+}
+function stop(){
+    clearInterval(elCrono);
+}
+function reset(){
+    setTimeout(reiniciarCrono,0)
+}
 function prepararParaula() {
     console.log(paraula);
     showParaula.innerText = "";
@@ -18,9 +74,9 @@ function prepararParaula() {
         showParaula.innerText += '-' ;
     }
     paraulaAmagada = showParaula.innerText;
+    start()
     
 }
-
 //Using split [...] we creat an iterable array to change the characters
 //then using char at we find if the character is in the word if it is we swap it.
 function adivinarLletra(e) {
@@ -39,26 +95,42 @@ function adivinarLletra(e) {
     showParaula.innerText = paraulaAmagada;
     return counter;
 }
+function endGame(string){
+    stop();
+    const envoltorio = document.getElementsByClassName('envoltorio-popup');
+    laHora2.innerText = laHora.innerText;
+    contenidor.style.display = 'none';
+    envoltorio[0].style.display = 'block';
+}
 function startGame(){
     prepararParaula();
     let errors = 0;
     contador.innerText = '7';
     contenidor.addEventListener('click', (e) => {
         if (e.target.classList.contains('lletra')) {
-            
-            if(adivinarLletra(e.target.innerText)>0){
-                e.target.classList.toggle('correct');
-            }else{
-                e.target.classList.toggle('error');
-                contador.innerText = (7-errors);
-                error.innerText = errors;
+            if (paraulaAmagada != paraula && errors != 7) {              
+                if(adivinarLletra(e.target.innerText)>0){
+                    e.target.classList.toggle('correct');
+                }else{
+                    e.target.classList.toggle('error');
+                    errors++;
+                    contador.innerText = (7-errors);
+                    error.innerText = errors;
+                }
+                if(paraulaAmagada === paraula){
+                    endGame("");
+                    
+                }else if(errors === 7){
+                    endGame("The word was: " + paraula);
+                }
             }
         }
     });
 }
 startGame();
-
-
+retry.addEventListener('click',(e)=>{
+    startGame();
+});
 
 
 

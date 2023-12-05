@@ -14,3 +14,8 @@ For home: finish game logic.
 
 Day 4:
 Sincronia
+
+Day 5:
+Phase 1 logic completed.
+For Home: Finish style then implement new timer.
+
