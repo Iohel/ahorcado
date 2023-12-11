@@ -13,10 +13,10 @@ let temaProva = ['test','trial','you','reddit'];
 let random = Math.random()*(temaProva.length-1);
 let paraula = temaProva[random.toFixed()].toUpperCase(); 
 let paraulaAmagada = "";
-
+let errors = 0;
 //Cronometro
 let elCrono;
-let elCountdown
+let elCountdown;
 let mifecha = new Date;
 let laHora = document.getElementById("time");
 let laHora2 = document.getElementById("time2");
@@ -26,7 +26,7 @@ let countdown = document.querySelector("countdown");
 
 //inicializa el tiempo del cronometro
 mifecha.setHours(0,0,0,0);
-countdown_seconds.setHours(0,0,11,0);
+countdown_seconds.setHours(0,0,20,0);
 
 //inicializa el texto de laHora
 laHora.innerHTML = "00:00:00";
@@ -36,12 +36,22 @@ function cooldown() {
     let segundos = countdown_seconds.getSeconds();
     segundos -= 1;
     countdown_seconds.setSeconds(segundos);
-    console.log(segundos);
     countdown.innerHTML = ""+segundos;
+    if(segundos<0){
+        errors++;
+        contador.innerText = (7-errors);
+        error.innerText = errors;
+        reiniciarCooldown();
+    }
+    if(errors === 7){
+        endGame('You lost.',errors);
+        stopCooldown();
+    }
     return segundos;
 }
 function reiniciarCooldown(){
     countdown_seconds.setHours(0,0,10,0);
+    countdown.innerHTML = "10"
 }
 function startCooldown(){
     elCountdown = setInterval(cooldown, 1000);
@@ -96,8 +106,7 @@ function prepararParaula() {
         showParaula.innerText += '-' ;
     }
     paraulaAmagada = showParaula.innerText;
-    start()
-    startCooldown();    
+      
 }
 //Using split [...] we creat an iterable array to change the characters
 //then using char at we find if the character is in the word if it is we swap it.
@@ -126,56 +135,77 @@ function endGame(final,error){
     laHora2.innerText = laHora.innerText;
     contenidor.style.display = 'none';
     envoltorio[0].style.display = 'block';
+
+    //Local Storage Saving
+    let finalScore = [];
+    
+    let record = localStorage.getItem(paraula);
+    record = JSON.parse(record);
+    
+    if(record != null){
+        
+        console.log('test');
+        if(record[0]>errors){
+            finalScore.push(errors);
+        }else{
+            finalScore.push(record[0]);
+        }
+        if(record[1]>mifecha.getSeconds()){
+            finalScore.push(mifecha.getSeconds());
+        }else{
+            finalScore.push(record[1]);
+        }
+        localStorage.setItem(paraula,JSON.stringify(finalScore));
+    }else{
+        finalScore = [errors,mifecha.getSeconds()]
+        localStorage.setItem(paraula,JSON.stringify(finalScore));
+    }
+    
 }
 function startGame(){
+    
     prepararParaula();
-    let errors = 0;
+    errors = 0;
     contador.innerText = '7';
+    let jump = 0;
     contenidor.addEventListener('click', (e) => {
+        if(jump === 0){
+            start()
+            startCooldown();
+            jump++;  
+        }
         if (e.target.classList.contains('lletra')) {
             if(paraulaAmagada != paraula && errors != 7) {              
                 if(adivinarLletra(e.target.innerText)>0){
                     e.target.classList.toggle('correct');
                     reiniciarCooldown();
-                }else{
+                }
+                else{
                     e.target.classList.toggle('error');
                     errors++;
                     contador.innerText = (7-errors);
                     error.innerText = errors;
                     reiniciarCooldown();
                 }
-                if(paraulaAmagada === paraula){
-                    endGame("You win" , errors);
-                    stopCooldown();                 
-                }else if(errors === 7){
-                    endGame('You lost.',errors);
-                    stopCooldown();
-                }
+                
             }
         }
+        if(paraulaAmagada === paraula){
+            endGame("You win" , errors);
+            stopCooldown();                 
+        }else if(errors === 7){
+            endGame('You lost.',errors);
+            stopCooldown();
+        }
     });
-    while (countdown_seconds.getSeconds > 0) {
-        console.log("test");
-    }
-   
+    
 }
 startGame();
+
 retry.addEventListener('click',(e)=>{
     startGame();
 });
 
 
-/* function replaceChar (str,e) {
-    str = [...str];
-    let i
-  
-    for (i = 0; i < str.length; i++) {
-      if (str[i] == '-') {
-        str[i] = e
-      }
-    }
-    return str.join('');
-  }
-  console.log(replaceChar('foo-bar-baz','t')); */
 
 

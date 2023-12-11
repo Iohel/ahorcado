@@ -19,3 +19,6 @@ Day 5:
 Phase 1 logic completed.
 For Home: Finish style then implement new timer.
 
+Day 6:
+Phase 2 completed.
+Implement Json processing and another page.
