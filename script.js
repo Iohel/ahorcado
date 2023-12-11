@@ -16,17 +16,39 @@ let paraulaAmagada = "";
 
 //Cronometro
 let elCrono;
+let elCountdown
 let mifecha = new Date;
 let laHora = document.getElementById("time");
 let laHora2 = document.getElementById("time2");
+let countdown_seconds = new Date;
+let countdown = document.querySelector("countdown");
+
 
 //inicializa el tiempo del cronometro
 mifecha.setHours(0,0,0,0);
+countdown_seconds.setHours(0,0,11,0);
 
 //inicializa el texto de laHora
 laHora.innerHTML = "00:00:00";
 
 //Main interval
+function cooldown() {
+    let segundos = countdown_seconds.getSeconds();
+    segundos -= 1;
+    countdown_seconds.setSeconds(segundos);
+    console.log(segundos);
+    countdown.innerHTML = ""+segundos;
+    return segundos;
+}
+function reiniciarCooldown(){
+    countdown_seconds.setHours(0,0,10,0);
+}
+function startCooldown(){
+    elCountdown = setInterval(cooldown, 1000);
+}
+function stopCooldown(){
+    clearInterval(elCountdown);
+}
 function crono(){
 
     let horas = mifecha.getHours();
@@ -53,7 +75,7 @@ function crono(){
 
 }
 function reiniciarCrono(){
-    mifecha.setHours(0,0,0,0);
+    mifecha.setHours(0,0,10,0);
 
 //inicializa el texto de laHora
     laHora.innerHTML = "00:00:00";
@@ -75,7 +97,7 @@ function prepararParaula() {
     }
     paraulaAmagada = showParaula.innerText;
     start()
-    
+    startCooldown();    
 }
 //Using split [...] we creat an iterable array to change the characters
 //then using char at we find if the character is in the word if it is we swap it.
@@ -85,7 +107,7 @@ function adivinarLletra(e) {
     console.log(paraulaAmagada);
     for (let i = 0; i < charArray.length; i++) {
         if (paraula.charAt(i) === e) {
-            charArray[i] = e
+            charArray[i] = e;
             console.log(charArray);
             counter++;
         }
@@ -95,8 +117,11 @@ function adivinarLletra(e) {
     showParaula.innerText = paraulaAmagada;
     return counter;
 }
-function endGame(string){
+function endGame(final,error){
     stop();
+    document.getElementById('status').innerText = final;
+    document.getElementById('palabra').innerText = "The word was: " + paraula;
+    document.getElementById('errores').innerText = "You had " + error + " mistakes";
     const envoltorio = document.getElementsByClassName('envoltorio-popup');
     laHora2.innerText = laHora.innerText;
     contenidor.style.display = 'none';
@@ -108,32 +133,36 @@ function startGame(){
     contador.innerText = '7';
     contenidor.addEventListener('click', (e) => {
         if (e.target.classList.contains('lletra')) {
-            if (paraulaAmagada != paraula && errors != 7) {              
+            if(paraulaAmagada != paraula && errors != 7) {              
                 if(adivinarLletra(e.target.innerText)>0){
                     e.target.classList.toggle('correct');
+                    reiniciarCooldown();
                 }else{
                     e.target.classList.toggle('error');
                     errors++;
                     contador.innerText = (7-errors);
                     error.innerText = errors;
+                    reiniciarCooldown();
                 }
                 if(paraulaAmagada === paraula){
-                    endGame("");
-                    
+                    endGame("You win" , errors);
+                    stopCooldown();                 
                 }else if(errors === 7){
-                    endGame("The word was: " + paraula);
+                    endGame('You lost.',errors);
+                    stopCooldown();
                 }
             }
         }
     });
+    while (countdown_seconds.getSeconds > 0) {
+        console.log("test");
+    }
+   
 }
 startGame();
 retry.addEventListener('click',(e)=>{
     startGame();
 });
-
-
-
 
 
 /* function replaceChar (str,e) {

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap'); */
 *{
     box-sizing: border-box;
 }
@@ -62,10 +62,6 @@ div#time2{
     display: flex;
     justify-content: space-around;
     font-size: 100px;
-}
-
-p.text{
-    margin-top:50px;
 }
 
 p.text span{
