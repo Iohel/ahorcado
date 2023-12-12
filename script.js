@@ -9,11 +9,13 @@ const status = document.getElementById('status');
 const palabra = document.getElementById('palabra');
 const showParaula = document.querySelector('.paraula');
 
+//
 let temaProva = ['test','trial','you','reddit'];
 let random = Math.random()*(temaProva.length-1);
 let paraula = temaProva[random.toFixed()].toUpperCase(); 
 let paraulaAmagada = "";
 let errors = 0;
+let arrayTheme;
 //Cronometro
 let elCrono;
 let elCountdown;
@@ -23,6 +25,22 @@ let laHora2 = document.getElementById("time2");
 let countdown_seconds = new Date;
 let countdown = document.querySelector("countdown");
 
+
+
+function prepararParaula() {
+    getThemeData("tutorial");
+    setTimeout(()=>{
+        console.log(arrayTheme);
+        random = Math.random()*(arrayTheme.length-1);
+        paraula = arrayTheme[random.toFixed()].word.toUpperCase(); 
+        /* console.log(paraula); */
+        showParaula.innerText = "";
+        for (let i = 0; i < paraula.length; i++) {
+            showParaula.innerText += '-' ;
+        }
+        paraulaAmagada = showParaula.innerText;
+    },10);
+}
 
 //inicializa el tiempo del cronometro
 mifecha.setHours(0,0,0,0);
@@ -99,15 +117,7 @@ function stop(){
 function reset(){
     setTimeout(reiniciarCrono,0)
 }
-function prepararParaula() {
-    console.log(paraula);
-    showParaula.innerText = "";
-    for (let i = 0; i < paraula.length; i++) {
-        showParaula.innerText += '-' ;
-    }
-    paraulaAmagada = showParaula.innerText;
-      
-}
+
 //Using split [...] we creat an iterable array to change the characters
 //then using char at we find if the character is in the word if it is we swap it.
 function adivinarLletra(e) {
@@ -200,6 +210,67 @@ function startGame(){
     });
     
 }
+
+const obtenerTODOS = (allblack,source)=>{
+
+    const request = new XMLHttpRequest();
+
+    request.addEventListener('readystatechange',()=>{
+        if(request.readyState === 4 && request.status === 200){
+            //console.log(request);
+            //console.log(request.responseText);
+            const respuesta = JSON.parse(request.responseText);
+            allblack(undefined, respuesta);
+        
+        }else if (request.readyState === 4) {
+            //console.log("No se ha podido obtener los datos.");
+            allblack("No se ha podido obtener los datos.",undefined);
+        }
+    });
+    
+    //open
+    //P1: tipo de solicitud
+    //P2: a que endpoint se solicita
+    //https://jsonplaceholder.typicode.com/todos
+    request.open('GET', source);
+    
+    //send
+    request.send();
+    
+
+};
+function gestionarRespuesta(error,data){
+    if(error){
+        console.log(error);
+    }else{
+        
+        arrayTheme = [...data[0]];
+        console.log(arrayTheme);
+    }
+}
+
+function getThemeData(key) {
+    
+    switch (key) {
+        case "tutorial":
+            
+            obtenerTODOS((error,data)=>{
+    
+                console.log("tutorial");
+                
+                gestionarRespuesta(error,data);
+                
+            },"./themes/tutorial.json");
+            
+            break;
+    
+        default:
+            break;
+    }
+    
+}
+
+
 startGame();
 
 retry.addEventListener('click',(e)=>{
