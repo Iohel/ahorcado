@@ -3,7 +3,7 @@ const contenidor = document.querySelector('.contenidor');
 const contador = document.getElementById('contador');
 const error = document.getElementById('errors');
 const total = document.getElementById('total');
-const retry = document.getElementById('retry')
+const retry = document.getElementById('retry');
 const time = document.getElementById('time');
 const status = document.getElementById('status');
 const palabra = document.getElementById('palabra');
@@ -16,6 +16,7 @@ let paraula = temaProva[random.toFixed()].toUpperCase();
 let paraulaAmagada = "";
 let errors = 0;
 let arrayTheme;
+let theme;
 //Cronometro
 let elCrono;
 let elCountdown;
@@ -27,8 +28,8 @@ let countdown = document.querySelector("countdown");
 
 
 
-function prepararParaula() {
-    getThemeData("tutorial");
+function prepararParaula(e) {
+    getThemeData(e);
     setTimeout(()=>{
         console.log(arrayTheme);
         random = Math.random()*(arrayTheme.length-1);
@@ -47,7 +48,7 @@ mifecha.setHours(0,0,0,0);
 countdown_seconds.setHours(0,0,20,0);
 
 //inicializa el texto de laHora
-laHora.innerHTML = "00:00:00";
+
 
 //Main interval
 function cooldown() {
@@ -172,9 +173,9 @@ function endGame(final,error){
     }
     
 }
-function startGame(){
+function startGame(e){
     
-    prepararParaula();
+    prepararParaula(e);
     errors = 0;
     contador.innerText = '7';
     let jump = 0;
@@ -252,7 +253,7 @@ function gestionarRespuesta(error,data){
 function getThemeData(key) {
     
     switch (key) {
-        case "tutorial":
+        case "English Words":
             
             obtenerTODOS((error,data)=>{
     
@@ -260,7 +261,40 @@ function getThemeData(key) {
                 
                 gestionarRespuesta(error,data);
                 
-            },"./themes/tutorial.json");
+            },"./themes/english_words.json");
+            
+            break;
+        case "Spanish Words":
+            
+            obtenerTODOS((error,data)=>{
+    
+                console.log("tutorial");
+                
+                gestionarRespuesta(error,data);
+                
+            },"./themes/spanish_words.json");
+            
+            break;
+        case "City Names":
+            
+            obtenerTODOS((error,data)=>{
+    
+                console.log("tutorial");
+                
+                gestionarRespuesta(error,data);
+                
+            },"./themes/city_names.json");
+            
+            break;
+        case "Pokemon Names":
+            
+            obtenerTODOS((error,data)=>{
+    
+                console.log("tutorial");
+                
+                gestionarRespuesta(error,data);
+                
+            },"./themes/pokemon_names.json");
             
             break;
     
@@ -269,13 +303,29 @@ function getThemeData(key) {
     }
     
 }
+if(document.title == "Ahorcado"){
+    theme = localStorage.getItem("theme");
+    console.log("2");
+    startGame(theme);
+    retry.addEventListener('click',(e)=>{
+        startGame(theme);
+    });
+
+}else{
+    let button = document.querySelectorAll("input[type = button]");
+    console.log("1");
+    button.forEach(element => {
+        element.addEventListener('click',()=>{
+            console.log(element.value);
+            theme = element.value;
+            localStorage.setItem("theme",element.value);
+            location.href = './ahorcado.html';
+        });
+    });
+}
 
 
-startGame();
 
-retry.addEventListener('click',(e)=>{
-    startGame();
-});
 
 
 
