@@ -31,7 +31,7 @@ let countdown = document.querySelector("countdown");
 function prepararParaula(e) {
     getThemeData(e);
     setTimeout(()=>{
-        console.log(arrayTheme);
+        
         random = Math.random()*(arrayTheme.length-1);
         paraula = arrayTheme[random.toFixed()].word.toUpperCase(); 
         /* console.log(paraula); */
@@ -40,7 +40,7 @@ function prepararParaula(e) {
             showParaula.innerText += '-' ;
         }
         paraulaAmagada = showParaula.innerText;
-    },10);
+    },1000);
 }
 
 //inicializa el tiempo del cronometro
@@ -305,7 +305,7 @@ function getThemeData(key) {
 }
 if(document.title == "Ahorcado"){
     theme = localStorage.getItem("theme");
-    console.log("2");
+    console.log(theme);
     startGame(theme);
     retry.addEventListener('click',(e)=>{
         startGame(theme);
