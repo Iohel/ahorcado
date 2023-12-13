@@ -40,7 +40,7 @@ function prepararParaula(e) {
             showParaula.innerText += '-' ;
         }
         paraulaAmagada = showParaula.innerText;
-    },20);
+    },200);
 }
 
 //inicializa el tiempo del cronometro
